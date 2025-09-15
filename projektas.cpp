@@ -27,6 +27,7 @@ Studentas ivesk();
 Studentas iveskIsFailo(const string &line);
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
 float skaiciuotiMediana(vector<int> &pazymiai);
+string formatuoti(string s, int plotis);
 
 int main() {
     vector<Studentas> Grupe;
@@ -48,45 +49,66 @@ int main() {
         }
 
         cout << "\n--- Studentai (isvedimas is konsoles) ---\n";
+        cout << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) << "|"
+             << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
+        cout << "-----------------------------------------------------\n";
         for (auto &temp : Grupe)
-            cout << temp.vard << " | " << temp.pav << " | " << temp.rez << "|" << temp.mediana <<endl;
+            cout << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) << "|"
+                 << formatuoti(std::to_string(temp.rez), 10) << "|" << formatuoti(std::to_string(temp.mediana), 9) << "|\n";
     }
 
     string failoVardas = "studentai.txt";
     vector<Studentas> GrupeIsFailo = skaitytiIsFailo(failoVardas);
 
     cout << "\n--- Studentai (skaityta is failo) ---\n";
+    cout << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) << "|"
+             << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
+    cout << "-----------------------------------------------------\n";
     for (auto &temp : GrupeIsFailo)
-        cout << temp.vard << " | " << temp.pav << " | " << temp.rez << "|" << temp.mediana <<endl;
+        cout << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) << "|"
+                 << formatuoti(std::to_string(temp.rez), 10) << "|" << formatuoti(std::to_string(temp.mediana), 9) << "|\n";
 
     return 0;
 }
 
-// Funkcija studentui rankiniu budu
+// Funkcija studento ivedimui rankiniu budu
 Studentas ivesk() {
     Studentas Laik;
     cout << "Ivesk varda: "; getline(cin, Laik.vard);
     cout << "Ivesk pavarde: "; getline(cin, Laik.pav);
-
-    cout << "Kiek pazymiu turi studentas: ";
-    int n, sum = 0;
+    cout << "Iveskite namu darbu pazymius po viena. Kai baigsite, tiesiog paspauskite ENTER:\n";
     string temp;
-    getline(cin, temp);
-    n = std::stoi(temp);
+    Laik.paz.clear();
 
-    Laik.paz.resize(n);
-    for (int i = 0; i < n; i++) {
-        cout << "Iveskite " << i + 1 << " pazymi: ";
+    while (true) {
+        cout << "Pazymys: ";
         getline(cin, temp);
-        Laik.paz[i] = std::stoi(temp);
-        sum += Laik.paz[i];
+        if (temp.empty()) break;
+        try {
+            int paz = std::stoi(temp);
+            Laik.paz.push_back(paz);
+        } catch (...) {
+            cout << "Klaida: iveskite skaiciu arba paspauskite ENTER, kad baigti.\n";
+        }
+    }
+    if (Laik.paz.empty()) {
+        cout << "Studentas neturi namu darbu. Bus naudojamas 0.\n";
+        Laik.paz.push_back(0);
+    }
+    while (true) {
+        cout << "Iveskite egzamino bala: ";
+        getline(cin, temp);
+        try {
+            Laik.egzas = std::stoi(temp);
+            break;
+        } catch (...) {
+            cout << "Klaida: iveskite skaiciu!\n";
+        }
     }
 
-    cout << "Iveskite egzamino bala: ";
-    getline(cin, temp);
-    Laik.egzas = std::stoi(temp);
-
-    Laik.rez = Laik.egzas * 0.6 + (float)sum / n * 0.4;
+    int sum = 0;
+    for (int p : Laik.paz) sum += p;
+    Laik.rez = Laik.egzas * 0.6 + (float)sum / Laik.paz.size() * 0.4;
     Laik.mediana = skaiciuotiMediana(Laik.paz);
 
     return Laik;
@@ -140,4 +162,12 @@ float skaiciuotiMediana(vector<int> &pazymiai) {
         return (temp[n/2 - 1] + temp[n/2]) / 2.0;
     else
         return temp[n/2];
+}
+
+// Funkcija, kuri prideda tarpų, kad stringas užimtų n simbolių
+string formatuoti(string s, int plotis) {
+    int tarpai = plotis - s.length();
+    int kaire = tarpai / 2;
+    int desine = tarpai - kaire;
+    return string(kaire, ' ') + s + string(desine, ' ');
 }
