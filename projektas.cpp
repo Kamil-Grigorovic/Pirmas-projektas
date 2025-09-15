@@ -1,12 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
 using std::vector;
+using std::ifstream;
+using std::istringstream;
 
 struct Studentas {
     string vard;
@@ -16,8 +20,10 @@ struct Studentas {
     float rez;
 };
 
-// Funkcijų deklaracija
+// Funkcijų deklaracijos
 Studentas ivesk();
+Studentas iveskIsFailo(const string &line);
+vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
 
 int main() {
     vector<Studentas> Grupe;
@@ -42,6 +48,13 @@ int main() {
         for (auto &temp : Grupe)
             cout << temp.vard << " | " << temp.pav << " | " << temp.rez << endl;
     }
+
+    string failoVardas = "studentai.txt";
+    vector<Studentas> GrupeIsFailo = skaitytiIsFailo(failoVardas);
+
+    cout << "\n--- Studentai (skaityta is failo) ---\n";
+    for (auto &temp : GrupeIsFailo)
+        cout << temp.vard << " | " << temp.pav << " | " << temp.rez << endl;
 
     return 0;
 }
@@ -72,4 +85,42 @@ Studentas ivesk() {
 
     Laik.rez = Laik.egzas * 0.6 + (float)sum / n * 0.4;
     return Laik;
+}
+
+// Funkcija vienos eilutes skaitymui is failo
+Studentas iveskIsFailo(const string &line) {
+    Studentas Laik;
+    Laik.paz.resize(15); 
+
+    istringstream in(line);
+    in >> Laik.vard >> Laik.pav;
+    int sum = 0;
+    for (int i = 0; i < 15; i++) {
+        in >> Laik.paz[i];
+        sum += Laik.paz[i];
+    }
+    in >> Laik.egzas;
+    Laik.rez = Laik.egzas * 0.6 + (float)sum / 15 * 0.4;
+
+    return Laik;
+}
+
+// Funkcija viso failo skaitymui
+vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
+    vector<Studentas> GrupeIsFailo;
+    ifstream failas(failoPavadinimas);
+    if (!failas) {
+        cout << "Nepavyko atidaryti failo: " << failoPavadinimas << endl;
+        return GrupeIsFailo;
+    }
+
+    string line;
+    getline(failas, line); // praleidziame antraste
+
+    while (getline(failas, line)) {
+        if (!line.empty())
+            GrupeIsFailo.push_back(iveskIsFailo(line));
+    }
+
+    return GrupeIsFailo;
 }
