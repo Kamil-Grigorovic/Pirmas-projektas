@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 using std::cout;
 using std::cin;
@@ -18,12 +19,14 @@ struct Studentas {
     vector<int> paz;
     int egzas;
     float rez;
+    float mediana;
 };
 
 // Funkcijų deklaracijos
 Studentas ivesk();
 Studentas iveskIsFailo(const string &line);
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
+float skaiciuotiMediana(vector<int> &pazymiai);
 
 int main() {
     vector<Studentas> Grupe;
@@ -46,7 +49,7 @@ int main() {
 
         cout << "\n--- Studentai (isvedimas is konsoles) ---\n";
         for (auto &temp : Grupe)
-            cout << temp.vard << " | " << temp.pav << " | " << temp.rez << endl;
+            cout << temp.vard << " | " << temp.pav << " | " << temp.rez << "|" << temp.mediana <<endl;
     }
 
     string failoVardas = "studentai.txt";
@@ -54,7 +57,7 @@ int main() {
 
     cout << "\n--- Studentai (skaityta is failo) ---\n";
     for (auto &temp : GrupeIsFailo)
-        cout << temp.vard << " | " << temp.pav << " | " << temp.rez << endl;
+        cout << temp.vard << " | " << temp.pav << " | " << temp.rez << "|" << temp.mediana <<endl;
 
     return 0;
 }
@@ -84,6 +87,8 @@ Studentas ivesk() {
     Laik.egzas = std::stoi(temp);
 
     Laik.rez = Laik.egzas * 0.6 + (float)sum / n * 0.4;
+    Laik.mediana = skaiciuotiMediana(Laik.paz);
+
     return Laik;
 }
 
@@ -101,6 +106,7 @@ Studentas iveskIsFailo(const string &line) {
     }
     in >> Laik.egzas;
     Laik.rez = Laik.egzas * 0.6 + (float)sum / 15 * 0.4;
+    Laik.mediana = skaiciuotiMediana(Laik.paz);
 
     return Laik;
 }
@@ -115,7 +121,7 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
     }
 
     string line;
-    getline(failas, line); // praleidziame antraste
+    getline(failas, line);
 
     while (getline(failas, line)) {
         if (!line.empty())
@@ -123,4 +129,15 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
     }
 
     return GrupeIsFailo;
+}
+
+// Funkcija medianai skaiciuoti
+float skaiciuotiMediana(vector<int> &pazymiai) {
+    vector<int> temp = pazymiai;
+    std::sort(temp.begin(), temp.end());
+    int n = temp.size();
+    if (n % 2 == 0)
+        return (temp[n/2 - 1] + temp[n/2]) / 2.0;
+    else
+        return temp[n/2];
 }
