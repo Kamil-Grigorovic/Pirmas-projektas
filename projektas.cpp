@@ -25,12 +25,12 @@ struct Studentas {
 // Funkcijų deklaracijos
 Studentas ivesk();
 Studentas iveskIsFailo(const string &line);
-vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
 float skaiciuotiMediana(vector<int> &pazymiai);
 string formatuoti(string s, int plotis);
+vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas); //>>>
 
 int main() {
-    vector<Studentas> Grupe;
+    vector<Studentas> visiStudentai; //>>> vienas bendras vektorius visiems studentams
     string pasirinkimas;
 
     cout << "Ar norite prideti studentus rankiniu budu? (taip/ne): ";
@@ -45,28 +45,22 @@ int main() {
 
         for (int j = 0; j < kiek; j++) {
             cout << "Iveskite " << j + 1 << " studenta:\n";
-            Grupe.push_back(ivesk());
+            visiStudentai.push_back(ivesk()); //>>> tiesiog pridedame į bendrą vektorių
         }
-
-        cout << "\n--- Studentai (isvedimas is konsoles) ---\n";
-        cout << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) << "|"
-             << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
-        cout << "-----------------------------------------------------\n";
-        for (auto &temp : Grupe)
-            cout << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) << "|"
-                 << formatuoti(std::to_string(temp.rez), 10) << "|" << formatuoti(std::to_string(temp.mediana), 9) << "|\n";
     }
 
-    string failoVardas = "studentai.txt";
-    vector<Studentas> GrupeIsFailo = skaitytiIsFailo(failoVardas);
+    string failoVardas = "kursiokai.txt";
+    vector<Studentas> isFailo = skaitytiIsFailo(failoVardas); //>>> skaitome studentus iš failo
+    visiStudentai.insert(visiStudentai.end(), isFailo.begin(), isFailo.end()); //>>> pridedame juos į bendrą vektorių
 
-    cout << "\n--- Studentai (skaityta is failo) ---\n";
+    //>>> išvedimas visų studentų
+    cout << "\n--- Visi Studentai ---\n";
     cout << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) << "|"
-             << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
+         << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
     cout << "-----------------------------------------------------\n";
-    for (auto &temp : GrupeIsFailo)
+    for (auto &temp : visiStudentai)
         cout << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) << "|"
-                 << formatuoti(std::to_string(temp.rez), 10) << "|" << formatuoti(std::to_string(temp.mediana), 9) << "|\n";
+             << formatuoti(std::to_string(temp.rez), 10) << "|" << formatuoti(std::to_string(temp.mediana), 9) << "|\n";
 
     return 0;
 }
@@ -117,40 +111,58 @@ Studentas ivesk() {
 // Funkcija vienos eilutes skaitymui is failo
 Studentas iveskIsFailo(const string &line) {
     Studentas Laik;
-    Laik.paz.resize(15); 
-
     istringstream in(line);
+
     in >> Laik.vard >> Laik.pav;
-    int sum = 0;
-    for (int i = 0; i < 15; i++) {
-        in >> Laik.paz[i];
-        sum += Laik.paz[i];
+    vector<int> visiSkaiciai;
+    string temp;
+    while (in >> temp) { //>>> skaitome kaip string
+        try {
+            int skaicius = std::stoi(temp); //>>> konvertuojame i int
+            visiSkaiciai.push_back(skaicius);
+        } catch (...) {
+            continue; // jei ne skaicius, tiesiog praleidžiame
+        }
     }
-    in >> Laik.egzas;
-    Laik.rez = Laik.egzas * 0.6 + (float)sum / 15 * 0.4;
+
+    if (visiSkaiciai.empty()) {
+        cout << "Klaida: studentas neturi pazymiu faile." << endl;
+        Laik.egzas = 0;
+        Laik.rez = 0;
+        Laik.mediana = 0;
+        return Laik;
+    }
+
+    Laik.egzas = visiSkaiciai.back();
+    visiSkaiciai.pop_back();
+    Laik.paz = visiSkaiciai;
+
+    int sum = 0;
+    for (int p : Laik.paz) sum += p;
+    float vid = (Laik.paz.empty()) ? 0 : (float)sum / Laik.paz.size();
+    Laik.rez = Laik.egzas * 0.6 + vid * 0.4;
     Laik.mediana = skaiciuotiMediana(Laik.paz);
 
     return Laik;
 }
 
+
 // Funkcija viso failo skaitymui
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
-    vector<Studentas> GrupeIsFailo;
+    vector<Studentas> studentai;
     ifstream failas(failoPavadinimas);
     if (!failas) {
         cout << "Nepavyko atidaryti failo: " << failoPavadinimas << endl;
-        return GrupeIsFailo;
+        return studentai;
     }
 
     string line;
-    getline(failas, line);
-
     while (getline(failas, line)) {
         if (!line.empty())
-            GrupeIsFailo.push_back(iveskIsFailo(line));
+            studentai.push_back(iveskIsFailo(line));
     }
 
-    return GrupeIsFailo;
+    return studentai;
 }
 
 // Funkcija medianai skaiciuoti
