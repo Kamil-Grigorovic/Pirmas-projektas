@@ -27,15 +27,14 @@ Studentas ivesk();
 Studentas iveskIsFailo(const string &line);
 float skaiciuotiMediana(vector<int> &pazymiai);
 string formatuoti(string s, int plotis);
-vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas); //>>>
+vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
 
 int main() {
-    vector<Studentas> visiStudentai; //>>> vienas bendras vektorius visiems studentams
+    vector<Studentas> visiStudentai;
     string pasirinkimas;
 
     cout << "Ar norite prideti studentus rankiniu budu? (taip/ne): ";
     getline(cin, pasirinkimas);
-
     if (pasirinkimas == "taip" || pasirinkimas == "Taip" || pasirinkimas == "TAIP") {
         cout << "Kiek studentu norite prideti rankiniu budu? ";
         int kiek;
@@ -45,15 +44,14 @@ int main() {
 
         for (int j = 0; j < kiek; j++) {
             cout << "Iveskite " << j + 1 << " studenta:\n";
-            visiStudentai.push_back(ivesk()); //>>> tiesiog pridedame į bendrą vektorių
+            visiStudentai.push_back(ivesk());
         }
     }
 
     string failoVardas = "kursiokai.txt";
-    vector<Studentas> isFailo = skaitytiIsFailo(failoVardas); //>>> skaitome studentus iš failo
-    visiStudentai.insert(visiStudentai.end(), isFailo.begin(), isFailo.end()); //>>> pridedame juos į bendrą vektorių
+    vector<Studentas> isFailo = skaitytiIsFailo(failoVardas);
+    visiStudentai.insert(visiStudentai.end(), isFailo.begin(), isFailo.end());
 
-    //>>> išvedimas visų studentų
     cout << "\n--- Visi Studentai ---\n";
     cout << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) << "|"
          << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
@@ -61,7 +59,6 @@ int main() {
     for (auto &temp : visiStudentai)
         cout << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) << "|"
              << formatuoti(std::to_string(temp.rez), 10) << "|" << formatuoti(std::to_string(temp.mediana), 9) << "|\n";
-
     return 0;
 }
 
@@ -104,7 +101,6 @@ Studentas ivesk() {
     for (int p : Laik.paz) sum += p;
     Laik.rez = Laik.egzas * 0.6 + (float)sum / Laik.paz.size() * 0.4;
     Laik.mediana = skaiciuotiMediana(Laik.paz);
-
     return Laik;
 }
 
@@ -116,17 +112,23 @@ Studentas iveskIsFailo(const string &line) {
     in >> Laik.vard >> Laik.pav;
     vector<int> visiSkaiciai;
     string temp;
-    while (in >> temp) { //>>> skaitome kaip string
+    while (in >> temp) { 
         try {
-            int skaicius = std::stoi(temp); //>>> konvertuojame i int
+            size_t pos;
+            int skaicius = std::stoi(temp, &pos);
+            if (pos != temp.length()) {
+                throw std::invalid_argument("Ne skaicius");
+            }
             visiSkaiciai.push_back(skaicius);
         } catch (...) {
-            continue; // jei ne skaicius, tiesiog praleidžiame
+            cout << "Klaida faile: studento \"" << Laik.vard << " " << Laik.pav 
+                 << "\" pazymys \"" << temp << "\" yra netinkamas!" << endl;
         }
     }
 
     if (visiSkaiciai.empty()) {
-        cout << "Klaida: studentas neturi pazymiu faile." << endl;
+        cout << "Klaida: studentas \"" << Laik.vard << " " << Laik.pav 
+             << "\" neturi galiojančiu pazymiu." << endl;
         Laik.egzas = 0;
         Laik.rez = 0;
         Laik.mediana = 0;
@@ -161,7 +163,6 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
         if (!line.empty())
             studentai.push_back(iveskIsFailo(line));
     }
-
     return studentai;
 }
 
