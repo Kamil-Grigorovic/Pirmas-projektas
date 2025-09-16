@@ -30,6 +30,7 @@ float skaiciuotiMediana(vector<int> &pazymiai);
 string formatuoti(string s, int plotis);
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
 Studentas generuokStudenta();
+void rikiuotiPagalPavarde(vector<Studentas> &studentai);
 
 int main() {
     vector<Studentas> visiStudentai;
@@ -84,6 +85,8 @@ int main() {
     string failoVardas = "kursiokai.txt";
     vector<Studentas> isFailo = skaitytiIsFailo(failoVardas);
     visiStudentai.insert(visiStudentai.end(), isFailo.begin(), isFailo.end());
+
+    rikiuotiPagalPavarde(visiStudentai);
 
     cout << "\n--- Visi Studentai ---\n";
     cout << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) << "|"
@@ -249,4 +252,13 @@ Studentas generuokStudenta() {
     Laik.rez = Laik.egzas * 0.6f + (float)sum / Laik.paz.size() * 0.4f;
     Laik.mediana = skaiciuotiMediana(Laik.paz);
     return Laik;
+}
+
+// Rūšiavimo funkcija
+void rikiuotiPagalPavarde(vector<Studentas> &studentai) {
+    std::sort(studentai.begin(), studentai.end(), [](const Studentas &a, const Studentas &b) {
+        if (a.pav == b.pav)
+            return a.vard < b.vard;
+        return a.pav < b.pav;
+    });
 }
