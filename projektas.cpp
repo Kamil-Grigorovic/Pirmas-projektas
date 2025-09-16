@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <random>
 
 using std::cout;
 using std::cin;
@@ -28,6 +29,7 @@ Studentas iveskIsFailo(const string &line);
 float skaiciuotiMediana(vector<int> &pazymiai);
 string formatuoti(string s, int plotis);
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
+Studentas generuokStudenta();
 
 int main() {
     vector<Studentas> visiStudentai;
@@ -36,15 +38,46 @@ int main() {
     cout << "Ar norite prideti studentus rankiniu budu? (taip/ne): ";
     getline(cin, pasirinkimas);
     if (pasirinkimas == "taip" || pasirinkimas == "Taip" || pasirinkimas == "TAIP") {
-        cout << "Kiek studentu norite prideti rankiniu budu? ";
         int kiek;
-        string input;
-        getline(cin, input);
-        kiek = std::stoi(input);
+        while (true) {
+            cout << "Kiek studentu norite prideti rankiniu budu? ";
+            string input;
+            getline(cin, input);
+            try {
+                kiek = std::stoi(input);
+                if (kiek > 0) break;
+                else cout << "Turi buti bent vienas studentas!\n";
+            } catch (...) {
+                cout << "Klaida: iveskite skaiciu!\n";
+            }
+        }
 
         for (int j = 0; j < kiek; j++) {
             cout << "Iveskite " << j + 1 << " studenta:\n";
             visiStudentai.push_back(ivesk());
+        }
+    }
+
+    cout << "Ar norite sugeneruoti atsitiktinius studentus? (taip/ne): ";
+    getline(cin, pasirinkimas);
+    if (pasirinkimas == "taip" || pasirinkimas == "Taip" || pasirinkimas == "TAIP") {
+        int kiek;
+        while (true) {
+            cout << "Kiek atsitiktiniu studentu sugeneruoti? ";
+            string input;
+            getline(cin, input);
+            try {
+                kiek = std::stoi(input);
+                if (kiek > 0) break;
+                else cout << "Turi buti bent vienas studentas!\n";
+            } catch (...) {
+                cout << "Klaida: iveskite skaiciu!\n";
+            }
+        }
+
+        for (int j = 0; j < kiek; j++) {
+            cout << "Sugeneruojame " << j + 1 << " studenta:\n";
+            visiStudentai.push_back(generuokStudenta());
         }
     }
 
@@ -183,4 +216,37 @@ string formatuoti(string s, int plotis) {
     int kaire = tarpai / 2;
     int desine = tarpai - kaire;
     return string(kaire, ' ') + s + string(desine, ' ');
+}
+
+// Funkcija atsitiktinio studento generavimui
+Studentas generuokStudenta() {
+    Studentas Laik;
+    cout << "Ivesk varda: "; getline(cin, Laik.vard);
+    cout << "Ivesk pavarde: "; getline(cin, Laik.pav);
+
+    int ndKiekis;
+    while (true) {
+        cout << "Kiek namu darbu pazymiu turi studentas? ";
+        string temp;
+        getline(cin, temp);
+        try {
+            ndKiekis = std::stoi(temp);
+            if (ndKiekis > 0) break;
+            else cout << "Turi buti bent vienas pazymys!\n";
+        } catch (...) {
+            cout << "Klaida: iveskite skaiciu!\n";
+        }
+    }
+
+    Laik.paz.clear();
+    for (int i = 0; i < ndKiekis; i++) {
+        Laik.paz.push_back(rand() % 10 + 1);
+    }
+    Laik.egzas = rand() % 10 + 1;
+
+    int sum = 0;
+    for (int p : Laik.paz) sum += p;
+    Laik.rez = Laik.egzas * 0.6f + (float)sum / Laik.paz.size() * 0.4f;
+    Laik.mediana = skaiciuotiMediana(Laik.paz);
+    return Laik;
 }
