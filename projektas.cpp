@@ -35,12 +35,20 @@ int main() {
 
     cout << "Ar norite prideti studentus rankiniu budu? (taip/ne): ";
     getline(cin, pasirinkimas);
-    if (pasirinkimas == "taip" || pasirinkimas == "Taip" || pasirinkimas == "TAIP") {
-        cout << "Kiek studentu norite prideti rankiniu budu? ";
+     if (pasirinkimas == "taip" || pasirinkimas == "Taip" || pasirinkimas == "TAIP") {
         int kiek;
-        string input;
-        getline(cin, input);
-        kiek = std::stoi(input);
+        while (true) {
+            cout << "Kiek studentu norite prideti rankiniu budu? ";
+            string input;
+            getline(cin, input);
+            try {
+                kiek = std::stoi(input);
+                if (kiek > 0) break;
+                else cout << "Turi buti bent vienas studentas!\n";
+            } catch (...) {
+                cout << "Klaida: iveskite skaiciu!\n";
+            }
+        }
 
         for (int j = 0; j < kiek; j++) {
             cout << "Iveskite " << j + 1 << " studenta:\n";
