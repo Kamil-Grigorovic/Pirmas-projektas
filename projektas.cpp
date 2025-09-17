@@ -32,6 +32,7 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
 Studentas generuokStudenta();
 void rikiuotiPagalPavarde(vector<Studentas> &studentai);
 void spausdintiIFaila(const vector<Studentas> &studentai, const string &failoVardas);
+string SkaiciaiSuKableliu(float value);
 
 int main() {
     vector<Studentas> visiStudentai;
@@ -95,7 +96,7 @@ int main() {
     cout << "-----------------------------------------------------\n";
     for (auto &temp : visiStudentai)
         cout << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) << "|"
-             << formatuoti(std::to_string(temp.rez), 10) << "|" << formatuoti(std::to_string(temp.mediana), 9) << "|\n";
+             << formatuoti(SkaiciaiSuKableliu(temp.rez), 10) << "|" << formatuoti(SkaiciaiSuKableliu(temp.mediana), 9) << "|\n";
 
     spausdintiIFaila(visiStudentai, "rezultatai.txt");
     return 0;
@@ -283,6 +284,15 @@ void spausdintiIFaila(const vector<Studentas> &visiStudentai, const string &fail
 
     for (auto &temp : visiStudentai) {
         out << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) 
-            << "|" << formatuoti(std::to_string(temp.rez), 10) << "|" << formatuoti(std::to_string(temp.mediana), 9) << "|\n";
+            << "|" << formatuoti(SkaiciaiSuKableliu(temp.rez), 10) << "|" << formatuoti(SkaiciaiSuKableliu(temp.mediana), 9) << "|\n";
     }
+}
+
+// Funkcija skaičiaus formatavimui su kableliu
+string SkaiciaiSuKableliu(float value) {
+    int sveika = (int)value;
+    int desimtys = (int)(value * 100 + 0.5) % 100;
+    string rezultatas = std::to_string(sveika) + ".";
+    rezultatas += std::to_string(desimtys);
+    return rezultatas;
 }

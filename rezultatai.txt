@@ -1,0 +1,22 @@
+|    Vardas    |    Pavardė   | Vidurkis | Mediana |
+-----------------------------------------------------
+|    Aiste     |    Aistyte    |   8.53   |   8.0   |
+|   Antanas    |  Antanaitis   |   8.93   |   7.0   |
+|   Arvydas    |  Arvydauskas  |   6.60   |   6.0   |
+|   Dovydas    |  Dovydauskas  |   8.87   |   9.0   |
+|     Egle     |    Egleite    |   8.0    |   8.0   |
+|    Gabija    |   Gabijaite   |   6.0    |   6.0   |
+|    Greta     |    Gretyte    |   9.73   |  9.50   |
+|     Ieva     |    Ievaite    |   9.13   |  9.50   |
+|    Jonas     |   Jonaitis    |   7.80   |   9.0   |
+|   Karolis    |  Karolaitis   |   5.20   |  5.50   |
+|    Laura     |   Lauraite    |   9.80   |  9.50   |
+|    Lukas     |   Lukaitis    |   7.64   |   6.0   |
+|    Mantas    |   Mantaitis   |   7.26   |   6.0   |
+|  Mindaugas   | Mindaugaitis  |   7.0    |   7.0   |
+|     Ona      |    Onaite     |   7.80   |  7.50   |
+|   Paulius    |  Paulauskas   |   7.0    |   7.0   |
+|    Petras    |   Petraitis   |   7.40   |   5.0   |
+|     Ruta     |    Rutaite    |   9.53   |   9.0   |
+|    Simona    |   Simonaite   |   9.7    |   9.0   |
+|    Tomas     |   Tomaitis    |   6.0    |   6.0   |
