@@ -4,7 +4,6 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <random>
 
 using std::cout;
 using std::cin;
@@ -23,7 +22,7 @@ struct Studentas {
     float mediana;
 };
 
-// Funkcijų deklaracijos
+// Funkciju deklaracijos
 Studentas ivesk();
 Studentas iveskIsFailo(const string &line);
 float skaiciuotiMediana(vector<int> &pazymiai);
@@ -36,104 +35,104 @@ string SkaiciaiSuKableliu(float value);
 
 int main() {
     vector<Studentas> visiStudentai;
-    string pasirinkimas;
+    bool veikia = true;
 
-    cout << "Ar norite pridėti studentus rankiniu būdu? (taip/ne): ";
-    getline(cin, pasirinkimas);
-    if (pasirinkimas == "taip" || pasirinkimas == "Taip" || pasirinkimas == "TAIP") {
-        int kiek;
-        while (true) {
-            cout << "Kiek studentų norite pridėti rankiniu būdu? ";
-            string input;
-            getline(cin, input);
-            try {
-                kiek = std::stoi(input);
-                if (kiek > 0) break;
-                else cout << "Turi būti bent vienas studentas!\n";
-            } catch (...) {
-                cout << "Klaida: įveskite skaičių!\n";
+    while (veikia) {
+        string pasirinkimas;
+
+        cout << "Pasirinkite veiksma:\n";
+        cout << "1 - Ivesti studenta rankiniu budu\n";
+        cout << "2 - Sugeneruoti studentus\n";
+        cout << "3 - Ivesti studentus is failo\n";
+        cout << "4 - Baigti programa\n";
+        cout << "Jusu pasirinkimas: ";
+        getline(cin, pasirinkimas);
+
+        if (pasirinkimas == "1") {
+            int kiek;
+            while (true) {
+                string input;
+                cout << "Kiek studentu ivesti rankiniu budu? ";
+                getline(cin, input);
+                try {
+                    kiek = std::stoi(input);
+                    if (kiek > 0) break;
+                } catch (...) {
+                    cout << "Klaida: iveskite skaiciu!\n";
+                }
             }
+
+            for (int j = 0; j < kiek; j++)
+                visiStudentai.push_back(ivesk());
+
+        } else if (pasirinkimas == "2") {
+            int kiek;
+            while (true) {
+                string input;
+                cout << "Kiek atsitiktiniu studentu sugeneruoti? ";
+                getline(cin, input);
+                try {
+                    kiek = std::stoi(input);
+                    if (kiek > 0) break;
+                } catch (...) {
+                    cout << "Klaida: iveskite skaiciu!\n";
+                }
+            }
+
+            for (int j = 0; j < kiek; j++)
+                visiStudentai.push_back(generuokStudenta());
+
+        } else if (pasirinkimas == "3") {
+            string failoVardas;
+            cout << "Iveskite failo pavadinima: ";
+            getline(cin, failoVardas);
+            vector<Studentas> isFailo = skaitytiIsFailo(failoVardas);
+            visiStudentai.insert(visiStudentai.end(), isFailo.begin(), isFailo.end());
+
+        } else if (pasirinkimas == "4") {
+            veikia = false;
+            break;
         }
 
-        for (int j = 0; j < kiek; j++) {
-            cout << "Įveskite " << j + 1 << " studentą:\n";
-            visiStudentai.push_back(ivesk());
-        }
+        rikiuotiPagalPavarde(visiStudentai);
+        spausdintiIFaila(visiStudentai, "rezultatai.txt");
     }
 
-    cout << "Ar norite sugeneruoti atsitiktinius studentus? (taip/ne): ";
-    getline(cin, pasirinkimas);
-    if (pasirinkimas == "taip" || pasirinkimas == "Taip" || pasirinkimas == "TAIP") {
-        int kiek;
-        while (true) {
-            cout << "Kiek atsitiktinių studentų sugeneruoti? ";
-            string input;
-            getline(cin, input);
-            try {
-                kiek = std::stoi(input);
-                if (kiek > 0) break;
-                else cout << "Turi būti bent vienas studentas!\n";
-            } catch (...) {
-                cout << "Klaida: įveskite skaičių!\n";
-            }
-        }
-
-        for (int j = 0; j < kiek; j++) {
-            cout << "Sugeneruojame " << j + 1 << " studentą:\n";
-            visiStudentai.push_back(generuokStudenta());
-        }
-    }
-
-    string failoVardas = "kursiokai.txt";
-    vector<Studentas> isFailo = skaitytiIsFailo(failoVardas);
-    visiStudentai.insert(visiStudentai.end(), isFailo.begin(), isFailo.end());
-
-    rikiuotiPagalPavarde(visiStudentai);
-
-    cout << "\n--- Visi Studentai ---\n";
-    cout << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavardė", 15) << "|"
-         << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
-    cout << "-----------------------------------------------------\n";
-    for (auto &temp : visiStudentai)
-        cout << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) << "|"
-             << formatuoti(SkaiciaiSuKableliu(temp.rez), 10) << "|" << formatuoti(SkaiciaiSuKableliu(temp.mediana), 9) << "|\n";
-
-    spausdintiIFaila(visiStudentai, "rezultatai.txt");
     return 0;
 }
 
-// Funkcija studento įvedimui rankiniu būdu
+// Funkcija studento ivedimui rankiniu budu
 Studentas ivesk() {
     Studentas Laik;
-    cout << "Įvesk vardą: "; getline(cin, Laik.vard);
-    cout << "Įvesk pavardę: "; getline(cin, Laik.pav);
-    cout << "Įveskite namų darbų pažymius po vieną. Kai baigsite, tiesiog paspauskite ENTER:\n";
+    cout << "Ivesk varda: "; getline(cin, Laik.vard);
+    cout << "Ivesk pavarde: "; getline(cin, Laik.pav);
+    cout << "Iveskite namu darbu pazymius po viena. Kai baigsite, tiesiog paspauskite ENTER:\n";
     string temp;
     Laik.paz.clear();
 
     while (true) {
-        cout << "Pažymys: ";
+        cout << "Pazymys: ";
         getline(cin, temp);
         if (temp.empty()) break;
         try {
             int paz = std::stoi(temp);
             Laik.paz.push_back(paz);
         } catch (...) {
-            cout << "Klaida: įveskite skaičių arba paspauskite ENTER, kad baigtumėte.\n";
+            cout << "Klaida: iveskite skaiciu arba paspauskite ENTER, kad baigti.\n";
         }
     }
     if (Laik.paz.empty()) {
-        cout << "Studentas neturi namų darbų. Bus naudojamas 0.\n";
+        cout << "Studentas neturi namu darbu. Bus naudojamas 0.\n";
         Laik.paz.push_back(0);
     }
     while (true) {
-        cout << "Įveskite egzamino balą: ";
+        cout << "Iveskite egzamino bala: ";
         getline(cin, temp);
         try {
             Laik.egzas = std::stoi(temp);
             break;
         } catch (...) {
-            cout << "Klaida: įveskite skaičių!\n";
+            cout << "Klaida: iveskite skaiciu!\n";
         }
     }
 
@@ -144,7 +143,7 @@ Studentas ivesk() {
     return Laik;
 }
 
-// Funkcija vienos eilutės skaitymui iš failo
+// Funkcija vienos eilutes skaitymui is failo
 Studentas iveskIsFailo(const string &line) {
     Studentas Laik;
     istringstream in(line);
@@ -157,18 +156,18 @@ Studentas iveskIsFailo(const string &line) {
             size_t pos;
             int skaicius = std::stoi(temp, &pos);
             if (pos != temp.length()) {
-                throw std::invalid_argument("Ne skaičius");
+                throw std::invalid_argument("Ne skaicius");
             }
             visiSkaiciai.push_back(skaicius);
         } catch (...) {
             cout << "Klaida faile: studento \"" << Laik.vard << " " << Laik.pav 
-                 << "\" pažymys \"" << temp << "\" yra netinkamas!" << endl;
+                 << "\" pazymys \"" << temp << "\" yra netinkamas!" << endl;
         }
     }
 
     if (visiSkaiciai.empty()) {
         cout << "Klaida: studentas \"" << Laik.vard << " " << Laik.pav 
-             << "\" neturi pažymių." << endl;
+             << "\" neturi pazymiu." << endl;
         Laik.egzas = 0;
         Laik.rez = 0;
         Laik.mediana = 0;
@@ -199,7 +198,7 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
 
     string line;
     if (!getline(failas, line)) {
-        cout << "Klaida: failas tuščias"<< endl;
+        cout << "Klaida: Failas tuscias"<< endl;
         return studentai;
     }
     while (getline(failas, line)) {
@@ -209,7 +208,7 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
     return studentai;
 }
 
-// Funkcija medianai skaičiuoti
+// Funkcija medianai skaiciuoti
 float skaiciuotiMediana(vector<int> &pazymiai) {
     vector<int> temp = pazymiai;
     std::sort(temp.begin(), temp.end());
@@ -220,7 +219,7 @@ float skaiciuotiMediana(vector<int> &pazymiai) {
         return temp[n/2];
 }
 
-// Funkcija, kuri prideda tarpų, kad stringas užimtų n simbolių
+// Funkcija, kuri prideda tarpu, kad stringas uzimtu n simboliu
 string formatuoti(string s, int plotis) {
     int tarpai = plotis - s.length();
     int kaire = tarpai / 2;
@@ -231,20 +230,20 @@ string formatuoti(string s, int plotis) {
 // Funkcija atsitiktinio studento generavimui
 Studentas generuokStudenta() {
     Studentas Laik;
-    cout << "Įvesk vardą: "; getline(cin, Laik.vard);
-    cout << "Įvesk pavardę: "; getline(cin, Laik.pav);
+    cout << "Ivesk varda: "; getline(cin, Laik.vard);
+    cout << "Ivesk pavarde: "; getline(cin, Laik.pav);
 
     int ndKiekis;
     while (true) {
-        cout << "Kiek namų darbų pažymių turi studentas? ";
+        cout << "Kiek namu darbu pazymiu turi studentas? ";
         string temp;
         getline(cin, temp);
         try {
             ndKiekis = std::stoi(temp);
             if (ndKiekis > 0) break;
-            else cout << "Turi būti bent vienas pažymys!\n";
+            else cout << "Turi buti bent vienas pazymys!\n";
         } catch (...) {
-            cout << "Klaida: įveskite skaičių!\n";
+            cout << "Klaida: iveskite skaiciu!\n";
         }
     }
 
@@ -261,7 +260,7 @@ Studentas generuokStudenta() {
     return Laik;
 }
 
-// Rūšiavimo funkcija
+// Rusiavimo funkcija
 void rikiuotiPagalPavarde(vector<Studentas> &studentai) {
     std::sort(studentai.begin(), studentai.end(), [](const Studentas &a, const Studentas &b) {
         if (a.pav == b.pav)
@@ -278,7 +277,7 @@ void spausdintiIFaila(const vector<Studentas> &visiStudentai, const string &fail
         return;
     }
 
-    out << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavardė", 15) 
+    out << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) 
         << "|" << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
     out << "-----------------------------------------------------\n";
 
@@ -288,7 +287,7 @@ void spausdintiIFaila(const vector<Studentas> &visiStudentai, const string &fail
     }
 }
 
-// Funkcija skaičiaus formatavimui su kableliu
+// Funkcija skaiciaus formatavimui su kableliu
 string SkaiciaiSuKableliu(float value) {
     int sveika = (int)value;
     int desimtys = (int)(value * 100 + 0.5) % 100;
