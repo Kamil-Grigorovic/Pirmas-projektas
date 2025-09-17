@@ -31,6 +31,7 @@ string formatuoti(string s, int plotis);
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
 Studentas generuokStudenta();
 void rikiuotiPagalPavarde(vector<Studentas> &studentai);
+void spausdintiIFaila(const vector<Studentas> &studentai, const string &failoVardas);
 
 int main() {
     vector<Studentas> visiStudentai;
@@ -38,7 +39,7 @@ int main() {
 
     cout << "Ar norite prideti studentus rankiniu budu? (taip/ne): ";
     getline(cin, pasirinkimas);
-     if (pasirinkimas == "taip" || pasirinkimas == "Taip" || pasirinkimas == "TAIP") {
+    if (pasirinkimas == "taip" || pasirinkimas == "Taip" || pasirinkimas == "TAIP") {
         int kiek;
         while (true) {
             cout << "Kiek studentu norite prideti rankiniu budu? ";
@@ -95,9 +96,10 @@ int main() {
     for (auto &temp : visiStudentai)
         cout << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) << "|"
              << formatuoti(std::to_string(temp.rez), 10) << "|" << formatuoti(std::to_string(temp.mediana), 9) << "|\n";
+
+    spausdintiIFaila(visiStudentai, "rezultatai.txt");
     return 0;
 }
-
 
 // Funkcija studento ivedimui rankiniu budu
 Studentas ivesk() {
@@ -165,7 +167,7 @@ Studentas iveskIsFailo(const string &line) {
 
     if (visiSkaiciai.empty()) {
         cout << "Klaida: studentas \"" << Laik.vard << " " << Laik.pav 
-             << "\" neturi galiojančiu pazymiu." << endl;
+             << "\" neturi pazymiu." << endl;
         Laik.egzas = 0;
         Laik.rez = 0;
         Laik.mediana = 0;
@@ -196,6 +198,10 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
     }
 
     string line;
+    if (!getline(failas, line)) {
+        cout << "Klaida: Failas tuscias"<< endl;
+        return studentai;
+    }
     while (getline(failas, line)) {
         if (!line.empty())
             studentai.push_back(iveskIsFailo(line));
@@ -262,4 +268,22 @@ void rikiuotiPagalPavarde(vector<Studentas> &studentai) {
             return a.vard < b.vard;
         return a.pav < b.pav;
     });
+}
+
+// Funkcija studentų rezultatų spausdinimui į failą
+void spausdintiIFaila(const vector<Studentas> &visiStudentai, const string &failoVardas) {
+    std::ofstream out(failoVardas);
+    if (!out) {
+        cout << "Nepavyko sukurti failo: " << failoVardas << endl;
+        return;
+    }
+
+    out << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) 
+        << "|" << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
+    out << "-----------------------------------------------------\n";
+
+    for (auto &temp : visiStudentai) {
+        out << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) 
+            << "|" << formatuoti(std::to_string(temp.rez), 10) << "|" << formatuoti(std::to_string(temp.mediana), 9) << "|\n";
+    }
 }
