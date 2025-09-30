@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <chrono>
 
 using std::cout;
 using std::cin;
@@ -29,8 +30,8 @@ float skaiciuotiMediana(vector<int> &pazymiai);
 string formatuoti(string s, int plotis);
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
 Studentas generuokStudenta();
-void rikiuotiPagalPavarde(vector<Studentas> &studentai);
-void spausdintiIFaila(const vector<Studentas> &visiStudentai);
+void rikiuotiIrSukurtGrupe(const vector<Studentas> &visiStudentai, vector<Studentas> &vargsiukai, vector<Studentas> &galvociai);
+void spausdintiIFaila(const vector<Studentas> &grupe, const string &failoVardas);
 string SkaiciaiSuKableliu(float value);
 
 int main() {
@@ -94,8 +95,11 @@ int main() {
             break;
         }
 
-        rikiuotiPagalPavarde(visiStudentai);
-        spausdintiIFaila(visiStudentai);
+        vector<Studentas> vargsiukai, galvociai;
+        rikiuotiIrSukurtGrupe(visiStudentai, vargsiukai, galvociai);
+
+        spausdintiIFaila(vargsiukai, "vargsiukai.txt");
+        spausdintiIFaila(galvociai, "galvociai.txt");
     }
 
     return 0;
@@ -190,6 +194,10 @@ Studentas iveskIsFailo(const string &line) {
 // Funkcija viso failo skaitymui
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
     vector<Studentas> studentai;
+
+//
+    auto start = std::chrono::high_resolution_clock::now();
+
     ifstream failas(failoPavadinimas);
     if (!failas) {
         cout << "Nepavyko atidaryti failo: " << failoPavadinimas << endl;
@@ -205,6 +213,14 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
         if (!line.empty())
             studentai.push_back(iveskIsFailo(line));
     }
+    failas.close();
+//
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+
+    cout << "Failo skaitymas uztruko " << elapsed.count() << " sekundziu." << endl;
+
+
     return studentai;
 }
 
@@ -261,47 +277,59 @@ Studentas generuokStudenta() {
 }
 
 // Rusiavimo funkcija
-void rikiuotiPagalPavarde(vector<Studentas> &studentai) {
-    std::sort(studentai.begin(), studentai.end(), [](const Studentas &a, const Studentas &b) {
+void rikiuotiIrSukurtGrupe(const vector<Studentas> &visiStudentai, 
+                            vector<Studentas> &vargsiukai, 
+                            vector<Studentas> &galvociai) {
+    auto start = std::chrono::high_resolution_clock::now();
+
+    vector<Studentas> temp = visiStudentai;
+
+    std::sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
         if (a.pav == b.pav)
             return a.vard < b.vard;
         return a.pav < b.pav;
     });
+
+    vargsiukai.clear();
+    galvociai.clear();
+
+    for (const auto &s : temp) {
+        if (s.rez < 5)
+            vargsiukai.push_back(s);
+        else
+            galvociai.push_back(s);
+    }
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    cout << "Rikiavimas ir grupavimas uztruko: " << elapsed.count() << " sekundziu." << endl;
 }
 
 // Funkcija studentų rezultatų spausdinimui į failą
-void spausdintiIFaila(const vector<Studentas> &visiStudentai) {
-    vector<Studentas> vargsiukai;
-    vector<Studentas> galvociai;
+void spausdintiIFaila(const vector<Studentas> &grupe, const string &failoVardas) {
+    auto start = std::chrono::high_resolution_clock::now();
 
-    for (const auto &temp : visiStudentai) {
-        if (temp.rez < 5)
-            vargsiukai.push_back(temp);
-        else
-            galvociai.push_back(temp);
+    std::ofstream out(failoVardas);
+    if (!out) {
+        cout << "Nepavyko sukurti failo: " << failoVardas << endl;
+        return;
     }
-    
-    auto spausdintiGrupe = [](const vector<Studentas> &grupe, const string &failoVardas) {
-        std::ofstream out(failoVardas);
-        if (!out) {
-            cout << "Nepavyko sukurti failo: " << failoVardas << endl;
-            return;
-        }
 
-        out << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) 
-            << "|" << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
-        out << "-----------------------------------------------------\n";
+    out << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) 
+        << "|" << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
+    out << "-----------------------------------------------------\n";
 
-        for (const auto &temp : grupe) {
-            out << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) 
-                << "|" << formatuoti(SkaiciaiSuKableliu(temp.rez), 10) 
-                << "|" << formatuoti(SkaiciaiSuKableliu(temp.mediana), 9) << "|\n";
-        }
-    };
+    for (const auto &temp : grupe) {
+        out << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) 
+            << "|" << formatuoti(SkaiciaiSuKableliu(temp.rez), 10) 
+            << "|" << formatuoti(SkaiciaiSuKableliu(temp.mediana), 9) << "|\n";
+    }
 
-    spausdintiGrupe(vargsiukai, "vargsiukai.txt");
-    spausdintiGrupe(galvociai, "galvociai.txt");
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    cout << "Spausdinimas i faila (" << failoVardas << ") uztruko: " << elapsed.count() << " sekundziu." << endl;
 }
+
 
 // Funkcija skaiciaus formatavimui su kableliu
 string SkaiciaiSuKableliu(float value) {
