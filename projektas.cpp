@@ -30,7 +30,7 @@ string formatuoti(string s, int plotis);
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
 Studentas generuokStudenta();
 void rikiuotiPagalPavarde(vector<Studentas> &studentai);
-void spausdintiIFaila(const vector<Studentas> &studentai, const string &failoVardas);
+void spausdintiIFaila(const vector<Studentas> &visiStudentai);
 string SkaiciaiSuKableliu(float value);
 
 int main() {
@@ -95,7 +95,7 @@ int main() {
         }
 
         rikiuotiPagalPavarde(visiStudentai);
-        spausdintiIFaila(visiStudentai, "rezultatai.txt");
+        spausdintiIFaila(visiStudentai);
     }
 
     return 0;
@@ -270,21 +270,37 @@ void rikiuotiPagalPavarde(vector<Studentas> &studentai) {
 }
 
 // Funkcija studentų rezultatų spausdinimui į failą
-void spausdintiIFaila(const vector<Studentas> &visiStudentai, const string &failoVardas) {
-    std::ofstream out(failoVardas);
-    if (!out) {
-        cout << "Nepavyko sukurti failo: " << failoVardas << endl;
-        return;
-    }
+void spausdintiIFaila(const vector<Studentas> &visiStudentai) {
+    vector<Studentas> vargsiukai;
+    vector<Studentas> galvociai;
 
-    out << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) 
-        << "|" << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
-    out << "-----------------------------------------------------\n";
-
-    for (auto &temp : visiStudentai) {
-        out << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) 
-            << "|" << formatuoti(SkaiciaiSuKableliu(temp.rez), 10) << "|" << formatuoti(SkaiciaiSuKableliu(temp.mediana), 9) << "|\n";
+    for (const auto &temp : visiStudentai) {
+        if (temp.rez < 5)
+            vargsiukai.push_back(temp);
+        else
+            galvociai.push_back(temp);
     }
+    
+    auto spausdintiGrupe = [](const vector<Studentas> &grupe, const string &failoVardas) {
+        std::ofstream out(failoVardas);
+        if (!out) {
+            cout << "Nepavyko sukurti failo: " << failoVardas << endl;
+            return;
+        }
+
+        out << "|" << formatuoti("Vardas", 14) << "|" << formatuoti(" Pavarde", 15) 
+            << "|" << formatuoti("Vidurkis", 10) << "|" << formatuoti("Mediana", 9) << "|\n";
+        out << "-----------------------------------------------------\n";
+
+        for (const auto &temp : grupe) {
+            out << "|" << formatuoti(temp.vard, 14) << "|" << formatuoti(temp.pav, 15) 
+                << "|" << formatuoti(SkaiciaiSuKableliu(temp.rez), 10) 
+                << "|" << formatuoti(SkaiciaiSuKableliu(temp.mediana), 9) << "|\n";
+        }
+    };
+
+    spausdintiGrupe(vargsiukai, "vargsiukai.txt");
+    spausdintiGrupe(galvociai, "galvociai.txt");
 }
 
 // Funkcija skaiciaus formatavimui su kableliu
