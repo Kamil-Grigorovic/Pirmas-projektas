@@ -173,17 +173,32 @@ Studentas generuokStudenta() {
 
 // Rusiavimo funkcija
 void rikiuotiIrSukurtGrupe(const vector<Studentas> &visiStudentai, 
-                            vector<Studentas> &vargsiukai, 
-                            vector<Studentas> &galvociai) {
+                           vector<Studentas> &vargsiukai, 
+                           vector<Studentas> &galvociai, 
+                           const string &kriterijus) {
     auto start = std::chrono::high_resolution_clock::now();
 
     vector<Studentas> temp = visiStudentai;
 
-    std::sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
-        if (a.pav == b.pav)
+    if (kriterijus == "vardas") {
+        std::sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
             return a.vard < b.vard;
-        return a.pav < b.pav;
-    });
+        });
+    } else if (kriterijus == "pavarde") {
+        std::sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
+            return a.pav < b.pav;
+        });
+    } else if (kriterijus == "vidurkis") {
+        std::sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
+            return a.rez < b.rez;
+        });
+    } else {
+        cout << "Neteisingas kriterijus, naudojama numatytoji (pavarde)." << endl;
+        std::sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
+            if (a.pav == b.pav) return a.vard < b.vard;
+            return a.pav < b.pav;
+        });
+    }
 
     vargsiukai.clear();
     galvociai.clear();

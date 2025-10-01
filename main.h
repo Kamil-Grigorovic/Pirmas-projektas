@@ -31,6 +31,6 @@ float skaiciuotiMediana(vector<int> &pazymiai);
 string formatuoti(string s, int plotis);
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
 Studentas generuokStudenta();
-void rikiuotiIrSukurtGrupe(const vector<Studentas> &visiStudentai, vector<Studentas> &vargsiukai, vector<Studentas> &galvociai);
+void rikiuotiIrSukurtGrupe(const vector<Studentas> &visiStudentai, vector<Studentas> &vargsiukai, vector<Studentas> &galvociai, const string &kriterijus);
 void spausdintiIFaila(const vector<Studentas> &grupe, const string &failoVardas);
 string SkaiciaiSuKableliu(float value);

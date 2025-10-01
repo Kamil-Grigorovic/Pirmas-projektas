@@ -62,7 +62,11 @@ int main() {
         }
 
         vector<Studentas> vargsiukai, galvociai;
-        rikiuotiIrSukurtGrupe(visiStudentai, vargsiukai, galvociai);
+        string kriterijus;
+        
+        cout << "Pasirinkite rikiavimo kriteriju (vardas / pavarde / vidurkis): ";
+        getline(cin, kriterijus);
+        rikiuotiIrSukurtGrupe(visiStudentai, vargsiukai, galvociai, kriterijus);
 
         spausdintiIFaila(vargsiukai, "vargsiukai.txt");
         spausdintiIFaila(galvociai, "galvociai.txt");
