@@ -222,7 +222,8 @@ void rikiuotiIrSukurtGrupe(const T &visiStudentai, T &vargsiukai, T &galvociai, 
 }
 
 // Funkcija studentų rezultatų spausdinimui į failą
-void spausdintiIFaila(const vector<Studentas> &grupe, const string &failoVardas) {
+template <typename T>
+void spausdintiIFaila(const T &grupe, const string &failoVardas) {
     auto start = std::chrono::high_resolution_clock::now();
 
     std::ofstream out(failoVardas);
