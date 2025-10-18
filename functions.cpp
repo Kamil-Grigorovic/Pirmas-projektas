@@ -180,33 +180,32 @@ Studentas<T> generuokStudenta() {
 }
 
 // Rusiavimo funkcija
-void rikiuotiIrSukurtGrupe(const vector<Studentas> &visiStudentai, 
-                           vector<Studentas> &vargsiukai, 
-                           vector<Studentas> &galvociai, 
-                           const string &kriterijus) {
-    auto start = std::chrono::high_resolution_clock::now();
-
-    vector<Studentas> temp = visiStudentai;
-
-    if (kriterijus == "vardas") {
-        std::sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
-            return a.vard < b.vard;
-        });
-    } else if (kriterijus == "pavarde") {
-        std::sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
-            return a.pav < b.pav;
-        });
-    } else if (kriterijus == "vidurkis") {
-        std::sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
-            return a.rez < b.rez;
-        });
+template <typename Container, typename Comparator>
+void rikiuoti(Container &temp, Comparator comp) {
+    if constexpr  (std::is_same_v<Container, std::list<typename Container::value_type>>) {
+        temp.sort(comp);
     } else {
-        cout << "Neteisingas kriterijus, naudojama numatytoji (pavarde)." << endl;
-        std::sort(temp.begin(), temp.end(), [](const Studentas &a, const Studentas &b) {
-            if (a.pav == b.pav) return a.vard < b.vard;
-            return a.pav < b.pav;
-        });
+        std::sort(temp.begin(), temp.end(), comp);
     }
+}
+template <typename T>
+void rikiuotiIrSukurtGrupe(const T &visiStudentai, T &vargsiukai, T &galvociai, const string &kriterijus) {
+    auto start = std::chrono::high_resolution_clock::now();
+    auto temp = visiStudentai;
+
+    auto comparator = [&](const auto &a, const auto &b) {
+        if (kriterijus == "vardas") 
+            return a.vard < b.vard;
+        if (kriterijus == "pavarde") 
+            return a.pav < b.pav;
+        if (kriterijus == "vidurkis") 
+            return a.rez < b.rez;
+        if (a.pav == b.pav) 
+            return a.vard < b.vard;
+        return a.pav < b.pav;
+    };
+
+    rikiuoti(temp, comparator);
 
     vargsiukai.clear();
     galvociai.clear();
@@ -217,7 +216,6 @@ void rikiuotiIrSukurtGrupe(const vector<Studentas> &visiStudentai,
         else
             galvociai.push_back(s);
     }
-
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
     cout << "Rikiavimas ir grupavimas uztruko: " << elapsed.count() << " sekundziu." << endl;
