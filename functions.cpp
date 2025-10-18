@@ -46,17 +46,18 @@ Studentas<T> ivesk() {
 }
 
 // Funkcija vienos eilutes skaitymui is failo
-Studentas iveskIsFailo(const string &line) {
-    Studentas Laik;
+template <typename T>
+Studentas<T> iveskIsFailo(const string &line) {
+    Studentas<T> Laik;
     istringstream in(line);
 
     in >> Laik.vard >> Laik.pav;
-    vector<int> visiSkaiciai;
+    T visiSkaiciai;
     string temp;
     while (in >> temp) { 
         try {
             size_t pos;
-            int skaicius = std::stoi(temp, &pos);
+            int skaicius = stoi(temp, &pos);
             if (pos != temp.length()) {
                 throw std::invalid_argument("Ne skaicius");
             }
