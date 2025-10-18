@@ -90,7 +90,6 @@ Studentas iveskIsFailo(const string &line) {
 vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
     vector<Studentas> studentai;
 
-//
     auto start = std::chrono::high_resolution_clock::now();
 
     ifstream failas(failoPavadinimas);
@@ -109,7 +108,7 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
             studentai.push_back(iveskIsFailo(line));
     }
     failas.close();
-//
+
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
 
@@ -249,3 +248,19 @@ string SkaiciaiSuKableliu(float value) {
     rezultatas += std::to_string(desimtys);
     return rezultatas;
 }
+
+// Sablonų deklaracijos
+template void rikiuotiIrSukurtGrupe<vector<Studentas<vector<int>>>>(const vector<Studentas<vector<int>>>&, vector<Studentas<vector<int>>>&, 
+    vector<Studentas<vector<int>>>&, const string&);
+template void rikiuotiIrSukurtGrupe<list<Studentas<list<int>>>>(const list<Studentas<list<int>>>&, list<Studentas<list<int>>>&,
+    list<Studentas<list<int>>>&, const string&);
+template void spausdintiIFaila<vector<Studentas<vector<int>>>>(const vector<Studentas<vector<int>>>&, const string&);
+template void spausdintiIFaila<list<Studentas<list<int>>>>(const list<Studentas<list<int>>>&, const string&);
+template Studentas<vector<int>> ivesk();
+template Studentas<list<int>> ivesk();
+template Studentas<vector<int>> iveskIsFailo(const string &line);
+template Studentas<list<int>> iveskIsFailo(const string &line);
+template vector<Studentas<vector<int>>> skaitytiIsFailo(const string &failoPavadinimas);
+template list<Studentas<list<int>>> skaitytiIsFailo(const string &failoPavadinimas);
+template Studentas<vector<int>> generuokStudenta();
+template Studentas<list<int>> generuokStudenta();
