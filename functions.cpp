@@ -91,8 +91,9 @@ Studentas<T> iveskIsFailo(const string &line) {
 }
 
 // Funkcija viso failo skaitymui
-vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
-    vector<Studentas> studentai;
+template <typename T>
+T skaitytiIsFailo(const string &failoPavadinimas) {
+    T studentai;
 
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -107,9 +108,10 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
         cout << "Klaida: Failas tuscias"<< endl;
         return studentai;
     }
+    using PazT = typename T::value_type::paz_type;
     while (getline(failas, line)) {
         if (!line.empty())
-            studentai.push_back(iveskIsFailo(line));
+            studentai.push_back(iveskIsFailo<PazT>(line));
     }
     failas.close();
 
@@ -122,15 +124,15 @@ vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas) {
     return studentai;
 }
 
-// Funkcija medianai skaiciuoti
-float skaiciuotiMediana(vector<int> &pazymiai) {
-    vector<int> temp = pazymiai;
-    std::sort(temp.begin(), temp.end());
+// medianai skaiciuoti
+template <typename Container>
+float skaiciuotiMediana(const Container &pazymiai) {
+    vector<int> temp(pazymiai.begin(), pazymiai.end());
+    sort(temp.begin(), temp.end());
     int n = temp.size();
-    if (n % 2 == 0)
-        return (temp[n/2 - 1] + temp[n/2]) / 2.0;
-    else
-        return temp[n/2];
+    if (n == 0) return 0;
+    if (n % 2 == 1) return temp[n/2];
+    return (temp[n/2 - 1] + temp[n/2]) / 2.0f;
 }
 
 // Funkcija, kuri prideda tarpu, kad stringas uzimtu n simboliu
