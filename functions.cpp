@@ -144,10 +144,13 @@ string formatuoti(string s, int plotis) {
 }
 
 // Funkcija atsitiktinio studento generavimui
-Studentas generuokStudenta() {
-    Studentas Laik;
-    cout << "Ivesk varda: "; getline(cin, Laik.vard);
-    cout << "Ivesk pavarde: "; getline(cin, Laik.pav);
+template <typename T>
+Studentas<T> generuokStudenta() {
+    Studentas<T> Laik;
+    cout << "Ivesk varda: "; 
+    getline(cin, Laik.vard);
+    cout << "Ivesk pavarde: "; 
+    getline(cin, Laik.pav);
 
     int ndKiekis;
     while (true) {
@@ -155,7 +158,7 @@ Studentas generuokStudenta() {
         string temp;
         getline(cin, temp);
         try {
-            ndKiekis = std::stoi(temp);
+            ndKiekis = stoi(temp);
             if (ndKiekis > 0) break;
             else cout << "Turi buti bent vienas pazymys!\n";
         } catch (...) {
