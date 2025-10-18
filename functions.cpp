@@ -1,10 +1,13 @@
 #include "main.h"
 
 // Funkcija studento ivedimui rankiniu budu
-Studentas ivesk() {
-    Studentas Laik;
-    cout << "Ivesk varda: "; getline(cin, Laik.vard);
-    cout << "Ivesk pavarde: "; getline(cin, Laik.pav);
+template <typename T>
+Studentas<T> ivesk() {
+    Studentas<T> Laik;
+    cout << "Ivesk varda: "; 
+    getline(cin, Laik.vard);
+    cout << "Ivesk pavarde: "; 
+    getline(cin, Laik.pav);
     cout << "Iveskite namu darbu pazymius po viena. Kai baigsite, tiesiog paspauskite ENTER:\n";
     string temp;
     Laik.paz.clear();
@@ -14,7 +17,7 @@ Studentas ivesk() {
         getline(cin, temp);
         if (temp.empty()) break;
         try {
-            int paz = std::stoi(temp);
+            int paz = stoi(temp);
             Laik.paz.push_back(paz);
         } catch (...) {
             cout << "Klaida: iveskite skaiciu arba paspauskite ENTER, kad baigti.\n";
@@ -28,7 +31,7 @@ Studentas ivesk() {
         cout << "Iveskite egzamino bala: ";
         getline(cin, temp);
         try {
-            Laik.egzas = std::stoi(temp);
+            Laik.egzas = stoi(temp);
             break;
         } catch (...) {
             cout << "Klaida: iveskite skaiciu!\n";
