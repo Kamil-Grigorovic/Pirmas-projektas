@@ -1,36 +1,44 @@
 #pragma once
 #include <iostream>
+#include <list>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
 #include <chrono>
+#include <type_traits>
 
-using std::cout;
-using std::cin;
-using std::endl;
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::istringstream;
+using namespace std;
 
+template <typename T>
 struct Studentas {
+    using paz_type = T;
     string vard;
     string pav;
-    vector<int> paz;
+    T paz;
     int egzas;
     float rez;
     float mediana;
 };
 
 // Funkciju deklaracijos
-Studentas ivesk();
-Studentas iveskIsFailo(const string &line);
-float skaiciuotiMediana(vector<int> &pazymiai);
+template <typename T>
+Studentas<T> ivesk();
+template <typename T>
+Studentas<T> iveskIsFailo(const string &line);
+template <typename T>
+float skaiciuotiMediana(const T &pazymiai);
+template <typename T>
+T skaitytiIsFailo(const string &failoPavadinimas);
+template <typename T>
+Studentas<T> generuokStudenta();
+template <typename T>
+void rikiuotiIrSukurtGrupe(const T &visiStudentai, T &vargsiukai, T &galvociai, const string &kriterijus);
+template <typename T>
+void spausdintiIFaila(const T &grupe, const string &failoVardas);
+template <typename Container, typename Comparator>
+void rikiuoti(Container &temp, Comparator comp);
+
 string formatuoti(string s, int plotis);
-vector<Studentas> skaitytiIsFailo(const string &failoPavadinimas);
-Studentas generuokStudenta();
-void rikiuotiIrSukurtGrupe(const vector<Studentas> &visiStudentai, vector<Studentas> &vargsiukai, vector<Studentas> &galvociai, const string &kriterijus);
-void spausdintiIFaila(const vector<Studentas> &grupe, const string &failoVardas);
 string SkaiciaiSuKableliu(float value);
