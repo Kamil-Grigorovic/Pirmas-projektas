@@ -180,7 +180,7 @@ Studentas<T> generuokStudenta() {
     return Laik;
 }
 
-// Rusiavimo funkcija
+// Rusiavimo funkcija su 1 strategija
 template <typename Container, typename Comparator>
 void rikiuoti(Container &temp, Comparator comp) {
     if constexpr  (std::is_same_v<Container, std::list<typename Container::value_type>>) {
@@ -257,6 +257,51 @@ void rikiuotiIrSukurtGrupe_2(T &visiStudentai, T &vargsiukai, const string &krit
          << elapsed.count() << " sekundziu." << endl;
 }
 
+// Rusiavimo funkcija su 3 strategija
+template <typename T>
+void rikiuotiIrSukurtGrupe_3(T &visiStudentai, T &vargsiukai, const string &kriterijus) {
+    auto start = std::chrono::high_resolution_clock::now();
+
+    auto comparator = [&](const auto &a, const auto &b) {
+        if (kriterijus == "vardas") 
+            return a.vard < b.vard;
+        if (kriterijus == "pavarde") 
+            return a.pav < b.pav;
+        if (kriterijus == "vidurkis") 
+            return a.rez < b.rez;
+        if (a.pav == b.pav) 
+            return a.vard < b.vard;
+        return a.pav < b.pav;
+    };
+    rikiuoti(visiStudentai, comparator);
+
+    vargsiukai.clear();
+
+    if constexpr (std::is_same_v<T, std::vector<typename T::value_type>>) {
+        std::copy_if(visiStudentai.begin(), visiStudentai.end(), std::back_inserter(vargsiukai),
+                     [](const auto &s) { return s.rez < 5; });
+
+        visiStudentai.erase(
+            std::remove_if(visiStudentai.begin(), visiStudentai.end(),
+                           [](const auto &s) { return s.rez < 5; }),
+            visiStudentai.end());
+
+    } else {
+        for (auto it = visiStudentai.begin(); it != visiStudentai.end(); ) {
+            if (it->rez < 5) {
+                vargsiukai.push_back(*it);
+                it = visiStudentai.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    cout << "Rikiavimas ir grupavimas (3 strategija) uztruko: "
+         << elapsed.count() << " sekundziu." << endl;
+}
 
 // Funkcija studentų rezultatų spausdinimui į failą
 template <typename T>
@@ -301,6 +346,8 @@ template void rikiuotiIrSukurtGrupe<list<Studentas<list<int>>>>(const list<Stude
     list<Studentas<list<int>>>&, const string&);
 template void rikiuotiIrSukurtGrupe_2<vector<Studentas<vector<int>>>>(vector<Studentas<vector<int>>>&, vector<Studentas<vector<int>>>&, const string&);
 template void rikiuotiIrSukurtGrupe_2<list<Studentas<list<int>>>>(list<Studentas<list<int>>>&, list<Studentas<list<int>>>&, const string&);
+template void rikiuotiIrSukurtGrupe_3<vector<Studentas<vector<int>>>>(vector<Studentas<vector<int>>>&, vector<Studentas<vector<int>>>&, const string&);
+template void rikiuotiIrSukurtGrupe_3<list<Studentas<list<int>>>>(list<Studentas<list<int>>>&, list<Studentas<list<int>>>&, const string&);
 template void spausdintiIFaila<vector<Studentas<vector<int>>>>(const vector<Studentas<vector<int>>>&, const string&);
 template void spausdintiIFaila<list<Studentas<list<int>>>>(const list<Studentas<list<int>>>&, const string&);
 template Studentas<vector<int>> ivesk();
