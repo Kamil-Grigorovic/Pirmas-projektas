@@ -21,17 +21,21 @@ Kodas skaičiuoja kiekvieno studento **vidurkį** ir **medianą**, rūšiuoja st
 ## Testavimai: ##
 ### Konteinerio tipas – _vector_ ###
 **1 000 įrašų failas:**
-    - Failo nuskaitymas, duomenų rūšiavimas, padalijimas į dvi grupes ir įrašymas į failus užtruko *~0.03 sekundės*.
+- Failo nuskaitymas, duomenų rūšiavimas, padalijimas į dvi grupes ir įrašymas į failus užtruko *~0.03 sekundės*.
+    
 **10 000 įrašų failas:**
-    - Failo nuskaitymas, duomenų rūšiavimas, padalijimas į dvi grupes ir įrašymas į failus užtruko *~0.06 sekundės*.
+- Failo nuskaitymas, duomenų rūšiavimas, padalijimas į dvi grupes ir įrašymas į failus užtruko *~0.06 sekundės*.
+    
 **100 000 įrašų failas:**
 - Failo nuskaitymas užtruko *0.26 sekundės*,
 - Duomenų rūšiavimas, padalijimas į dvi grupes užtruko *0.18 sekundės*,
 - Įrašymas į failus užtruko *0.08 sekundės*.
+  
 **1 000 000 įrašų failas:**
 - Failo nuskaitymas užtruko *2.4 sekundės*,
 - Duomenų rūšiavimas, padalijimas į dvi grupes užtruko *2.16 sekundės*,
 - Įrašymas į failus užtruko *0.7 sekundės*.
+  
 **10 000 000 įrašų failas:**
 - Failo nuskaitymas užtruko *26.4 sekundės*,
 - Duomenų rūšiavimas, padalijimas į dvi grupes užtruko *28.7 sekundės*,
@@ -40,16 +44,20 @@ Kodas skaičiuoja kiekvieno studento **vidurkį** ir **medianą**, rūšiuoja st
 ### Konteinerio tipas – _list_ ###
 **1 000 įrašų failas:**
 - Failo nuskaitymas, duomenų rūšiavimas, padalijimas į dvi grupes ir įrašymas į failus užtruko *~0.03 sekundės*.
+- 
 **10 000 įrašų failas:**
 - Failo nuskaitymas, duomenų rūšiavimas, padalijimas į dvi grupes ir įrašymas į failus užtruko *~0.07 sekundės*.
+- 
 **100 000 įrašų failas:**
 - Failo nuskaitymas užtruko *0.34 sekundės*,
 - Duomenų rūšiavimas, padalijimas į dvi grupes užtruko *0.2 sekundės*,
 - Įrašymas į failus užtruko *0.07 sekundės*.
+
 **1 000 000 įrašų failas:**
 - Failo nuskaitymas užtruko *3.33 sekundės*,
 - Duomenų rūšiavimas, padalijimas į dvi grupes užtruko *2.23 sekundės*,
 - Įrašymas į failus užtruko *0.7 sekundės*.
+- 
 **10 000 000 įrašų failas:**
 - Failo nuskaitymas užtruko *34.8 sekundės*,
 - Duomenų rūšiavimas, padalijimas į dvi grupes užtruko *161 sekundės*,
