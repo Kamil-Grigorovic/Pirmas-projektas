@@ -36,6 +36,8 @@ Studentas<T> generuokStudenta();
 template <typename T>
 void rikiuotiIrSukurtGrupe(const T &visiStudentai, T &vargsiukai, T &galvociai, const string &kriterijus);
 template <typename T>
+void rikiuotiIrSukurtGrupe_2(T &visiStudentai, T &vargsiukai, const string &kriterijus);
+template <typename T>
 void spausdintiIFaila(const T &grupe, const string &failoVardas);
 template <typename Container, typename Comparator>
 void rikiuoti(Container &temp, Comparator comp);
