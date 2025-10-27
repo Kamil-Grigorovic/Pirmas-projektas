@@ -124,6 +124,7 @@ T skaitytiIsFailo(const string &failoPavadinimas) {
     return studentai;
 }
 
+
 // medianai skaiciuoti
 template <typename Container>
 float skaiciuotiMediana(const Container &pazymiai) {
@@ -220,6 +221,7 @@ void rikiuotiIrSukurtGrupe(const T &visiStudentai, T &vargsiukai, T &galvociai, 
     std::chrono::duration<double> elapsed = end - start;
     cout << "Rikiavimas ir grupavimas uztruko: " << elapsed.count() << " sekundziu." << endl;
 }
+
 
 // Funkcija studentų rezultatų spausdinimui į failą
 template <typename T>
