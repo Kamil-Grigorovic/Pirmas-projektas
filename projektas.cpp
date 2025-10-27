@@ -64,6 +64,11 @@ int main() {
                 spausdintiIFaila(vargsiukai, "vargsiukai_vector.txt");
                 spausdintiIFaila(visiStudentai, "galvociai_vector.txt");
             }
+            else if (strategija == "3") {
+                rikiuotiIrSukurtGrupe_3(visiStudentai, vargsiukai, kriterijus);
+                spausdintiIFaila(vargsiukai, "vargsiukai_vector.txt");
+                spausdintiIFaila(visiStudentai, "galvociai_vector.txt");
+            }
         }
     } else if (KonteinerioTipas == "list") {
         list<Studentas<list<int>>> visiStudentai;
@@ -120,6 +125,11 @@ int main() {
             }
             else if (strategija == "2") {
                 rikiuotiIrSukurtGrupe_2(visiStudentai, vargsiukai, kriterijus);
+                spausdintiIFaila(vargsiukai, "vargsiukai_vector.txt");
+                spausdintiIFaila(visiStudentai, "galvociai_vector.txt");
+            }
+            else if (strategija == "3") {
+                rikiuotiIrSukurtGrupe_3(visiStudentai, vargsiukai, kriterijus);
                 spausdintiIFaila(vargsiukai, "vargsiukai_vector.txt");
                 spausdintiIFaila(visiStudentai, "galvociai_vector.txt");
             }
