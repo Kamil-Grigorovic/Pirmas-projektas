@@ -222,6 +222,41 @@ void rikiuotiIrSukurtGrupe(const T &visiStudentai, T &vargsiukai, T &galvociai, 
     cout << "Rikiavimas ir grupavimas uztruko: " << elapsed.count() << " sekundziu." << endl;
 }
 
+// Rusiavimo funkcija su 2 strategija
+template <typename T>
+void rikiuotiIrSukurtGrupe_2(T &visiStudentai, T &vargsiukai, const string &kriterijus) {
+    auto start = std::chrono::high_resolution_clock::now();
+
+    auto comparator = [&](const auto &a, const auto &b) {
+        if (kriterijus == "vardas") 
+            return a.vard < b.vard;
+        if (kriterijus == "pavarde") 
+            return a.pav < b.pav;
+        if (kriterijus == "vidurkis") 
+            return a.rez < b.rez;
+        if (a.pav == b.pav) 
+            return a.vard < b.vard;
+        return a.pav < b.pav;
+    };
+
+    rikiuoti(visiStudentai, comparator);
+
+    vargsiukai.clear();
+    for (auto it = visiStudentai.begin(); it != visiStudentai.end(); ) {
+        if (it->rez < 5) {
+            vargsiukai.push_back(*it);
+            it = visiStudentai.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    cout << "Rikiavimas ir grupavimas (2 strategija) uztruko: " 
+         << elapsed.count() << " sekundziu." << endl;
+}
+
 
 // Funkcija studentų rezultatų spausdinimui į failą
 template <typename T>
@@ -264,6 +299,8 @@ template void rikiuotiIrSukurtGrupe<vector<Studentas<vector<int>>>>(const vector
     vector<Studentas<vector<int>>>&, const string&);
 template void rikiuotiIrSukurtGrupe<list<Studentas<list<int>>>>(const list<Studentas<list<int>>>&, list<Studentas<list<int>>>&,
     list<Studentas<list<int>>>&, const string&);
+template void rikiuotiIrSukurtGrupe_2<vector<Studentas<vector<int>>>>(vector<Studentas<vector<int>>>&, vector<Studentas<vector<int>>>&, const string&);
+template void rikiuotiIrSukurtGrupe_2<list<Studentas<list<int>>>>(list<Studentas<list<int>>>&, list<Studentas<list<int>>>&, const string&);
 template void spausdintiIFaila<vector<Studentas<vector<int>>>>(const vector<Studentas<vector<int>>>&, const string&);
 template void spausdintiIFaila<list<Studentas<list<int>>>>(const list<Studentas<list<int>>>&, const string&);
 template Studentas<vector<int>> ivesk();
