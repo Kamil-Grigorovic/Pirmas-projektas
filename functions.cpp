@@ -1,4 +1,4 @@
-#include "main.h"
+#include "main_list.h"
 
 // Funkcija studento ivedimui rankiniu budu
 template <typename T>
@@ -124,7 +124,6 @@ T skaitytiIsFailo(const string &failoPavadinimas) {
     return studentai;
 }
 
-
 // medianai skaiciuoti
 template <typename Container>
 float skaiciuotiMediana(const Container &pazymiai) {
@@ -180,7 +179,7 @@ Studentas<T> generuokStudenta() {
     return Laik;
 }
 
-// Rusiavimo funkcija su 1 strategija
+// Rusiavimo funkcija
 template <typename Container, typename Comparator>
 void rikiuoti(Container &temp, Comparator comp) {
     if constexpr  (std::is_same_v<Container, std::list<typename Container::value_type>>) {
@@ -219,7 +218,7 @@ void rikiuotiIrSukurtGrupe(const T &visiStudentai, T &vargsiukai, T &galvociai, 
     }
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
-    cout << "Rikiavimas ir grupavimas uztruko: " << elapsed.count() << " sekundziu." << endl;
+    cout << "Rikiavimas ir grupavimas (1 strategija) uztruko: " << elapsed.count() << " sekundziu." << endl;
 }
 
 // Rusiavimo funkcija su 2 strategija
@@ -257,7 +256,7 @@ void rikiuotiIrSukurtGrupe_2(T &visiStudentai, T &vargsiukai, const string &krit
          << elapsed.count() << " sekundziu." << endl;
 }
 
-// Rusiavimo funkcija su 3 strategija
+// Rusiavimas ir grupavimas 3 strategija
 template <typename T>
 void rikiuotiIrSukurtGrupe_3(T &visiStudentai, T &vargsiukai, const string &kriterijus) {
     auto start = std::chrono::high_resolution_clock::now();
@@ -344,10 +343,6 @@ template void rikiuotiIrSukurtGrupe<vector<Studentas<vector<int>>>>(const vector
     vector<Studentas<vector<int>>>&, const string&);
 template void rikiuotiIrSukurtGrupe<list<Studentas<list<int>>>>(const list<Studentas<list<int>>>&, list<Studentas<list<int>>>&,
     list<Studentas<list<int>>>&, const string&);
-template void rikiuotiIrSukurtGrupe_2<vector<Studentas<vector<int>>>>(vector<Studentas<vector<int>>>&, vector<Studentas<vector<int>>>&, const string&);
-template void rikiuotiIrSukurtGrupe_2<list<Studentas<list<int>>>>(list<Studentas<list<int>>>&, list<Studentas<list<int>>>&, const string&);
-template void rikiuotiIrSukurtGrupe_3<vector<Studentas<vector<int>>>>(vector<Studentas<vector<int>>>&, vector<Studentas<vector<int>>>&, const string&);
-template void rikiuotiIrSukurtGrupe_3<list<Studentas<list<int>>>>(list<Studentas<list<int>>>&, list<Studentas<list<int>>>&, const string&);
 template void spausdintiIFaila<vector<Studentas<vector<int>>>>(const vector<Studentas<vector<int>>>&, const string&);
 template void spausdintiIFaila<list<Studentas<list<int>>>>(const list<Studentas<list<int>>>&, const string&);
 template Studentas<vector<int>> ivesk();
@@ -358,3 +353,7 @@ template vector<Studentas<vector<int>>> skaitytiIsFailo(const string &failoPavad
 template list<Studentas<list<int>>> skaitytiIsFailo(const string &failoPavadinimas);
 template Studentas<vector<int>> generuokStudenta();
 template Studentas<list<int>> generuokStudenta();
+template void rikiuotiIrSukurtGrupe_2<vector<Studentas<vector<int>>>>(vector<Studentas<vector<int>>>&, vector<Studentas<vector<int>>>&, const string&);
+template void rikiuotiIrSukurtGrupe_2<list<Studentas<list<int>>>>(list<Studentas<list<int>>>&, list<Studentas<list<int>>>&, const string&);
+template void rikiuotiIrSukurtGrupe_3<vector<Studentas<vector<int>>>>(vector<Studentas<vector<int>>>&, vector<Studentas<vector<int>>>&, const string&);
+template void rikiuotiIrSukurtGrupe_3<list<Studentas<list<int>>>>(list<Studentas<list<int>>>&, list<Studentas<list<int>>>&, const string&);
