@@ -1,4 +1,4 @@
-#include "main_list.h"
+#include "main.h"
 
 int main() {
     bool veikia = true;

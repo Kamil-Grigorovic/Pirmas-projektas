@@ -1,4 +1,4 @@
-#include "main_list.h"
+#include "main.h"
 
 // Funkcija studento ivedimui rankiniu budu
 template <typename T>
