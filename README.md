@@ -76,7 +76,7 @@ Kodas skaičiuoja kiekvieno studento **vidurkį** ir **medianą**, rūšiuoja st
 - Įrašymas į failus užtruko *12.5 sekundės*.
 
 ### Išvados ###
-Naudojant *vector* konteinerį, optimaliausia taikyti *3 strategiją*. Tuo tarpu *list* konteinerio atveju efektyviausios yra *2* ir *3 strategijos*.
+Naudojant *vector* konteinerį, optimaliausia taikyti rūšiavimui *3 strategiją*. Tuo tarpu *list* konteinerio atveju efektyviausios yra *2* ir *3 strategijos*.
     
 ## Sistemos parametrai: ##
 
