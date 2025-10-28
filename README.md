@@ -5,7 +5,7 @@ Programa skirta studentų duomenų tvarkymui:
  -  *nuskaitymui iš failų.* 
  -  *galimybė pasirinkti, kokį konteinerio tipą naudoti.*
 
-Kodas skaičiuoja kiekvieno studento **vidurkį** ir **medianą**, rūšiuoja studentus pagal vartotojo pasirinktą kriterijų (**vardą, pavardę arba vidurkį**), padalija juos į dvi grupes – **vargsiukus** ir **galvočius** – ir išsaugo rezultatus į atskirus failus.
+Kodas skaičiuoja kiekvieno studento **vidurkį** ir **medianą**, rūšiuoja studentus pagal vartotojo pasirinktą kriterijų (**vardą, pavardę arba vidurkį**), padalija juos į dvi grupes (Galima pasirinkti vieną iš trijų rūšiavimo strategijų) – **vargsiukus** ir **galvočius** – ir išsaugo rezultatus į atskirus failus.
 
 ## Funkcijos: ##
  - **_ivesk()_** – įveda studentą rankiniu būdu.
